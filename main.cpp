@@ -7,20 +7,26 @@ class Tag {
     public:
         Tag(std::string tag_name) {
             this->tag_name = tag_name;
+            std::cout << tag_name << " (no child tags) " << std::endl;
         }
-        Tag(std::string tag_name, std::vector<Tag> children) {
+        Tag(std::string tag_name, std::vector<Tag*> child_tags) {
             this->tag_name = tag_name;
-            this->children = children;
+            std::cout << tag_name;
+
+            this->child_tags = child_tags;
+            for (auto c : this->child_tags) std::cout << c << " ";
+            std::cout << " end " << std::endl;
+
         }
         virtual std::string to_string() {
             std::string str = "<" + tag_name + ">\n";
-            for (auto c : children) str += (&c)->to_string();
+            for (Tag* c : child_tags) str += c->to_string();
             str += "</" + tag_name + ">\n";
             return str;
         }
     protected:
         std::string tag_name;
-        std::vector<Tag> children;
+        std::vector<Tag*> child_tags;
 };
 
 class A_Tag : public Tag {
@@ -28,12 +34,12 @@ class A_Tag : public Tag {
         A_Tag(std::string href_url) : Tag("a") {
             this->href_url = href_url;
         }
-        A_Tag(std::string href_url, std::vector<Tag> children) : Tag("a", children) {
+        A_Tag(std::string href_url, std::vector<Tag*> child_tags) : Tag("a", child_tags) {
             this->href_url = href_url;
         }
         std::string to_string() override {
             std::string str = "<" + tag_name + " href=\"" + href_url + "\">\n";
-            for (auto c : children) str += (&c)->to_string();
+            for (auto c : child_tags) str += c->to_string();
             str += "</" + tag_name + ">\n";
             return str;
         }
@@ -48,17 +54,17 @@ class Image_Tag : public Tag {
         std::string image_url;
 };
 
+
+
+
+
 int main() {
     std::cout << "Hello from the C++ world" << std::endl;
 
-
-
-    A_Tag tag3 = A_Tag("www.google.com");
-    Tag tag2 = Tag("custom_tag", std::vector<Tag>{
-            A_Tag("www.twitch.tv"),
-            A_Tag("www.youtube.com")
+    Tag *root = new Tag("root_tag", std::vector<Tag*>{
+            new Tag("new_tag"),
+            new A_Tag("www.twitch.tv")
         });
-
-    std::cout << tag2.to_string() << std::endl;
+    std::cout << root->to_string() << std::endl;
     return 0;
 }
