@@ -7,14 +7,13 @@ class Tag {
     public:
         Tag(std::string tag_name) {
             this->tag_name = tag_name;
-            // std::cout << tag_name << " (no child tags) " << std::endl;
         }
         Tag(std::string tag_name, std::vector<Tag*> child_tags) {
             this->tag_name = tag_name;
-            // std::cout << tag_name;
             this->child_tags = child_tags;
-            // for (auto c : this->child_tags) std::cout << c << " ";
-            // std::cout << " end " << std::endl;
+        }
+        ~Tag() {
+            for (Tag *c : child_tags) delete c;
         }
         virtual std::string to_string() {
             std::string str = "<" + tag_name + ">\n";
@@ -72,6 +71,28 @@ class Img_Tag : public Tag {
         std::string alt_text;
 };
 
+class Link_Tag : public Tag {
+    public:
+        Link_Tag(std::string rel, std::string href) : Tag("link") {
+            this->rel = rel;
+            this->rel = href;
+        }
+        std::string to_string() override {
+            return "<link rel=\"" + rel + "\" href=\"" + href + "\">\n";
+        }
+    private:
+        std::string rel;
+        std::string href;
+};
+
+class Unary_Tag : public Tag {
+    public:
+        Unary_Tag(std::string tag_name) : Tag(tag_name) {}
+        std::string to_string() override {
+            return "<" + tag_name + " />\n";
+        }
+};
+
 int main() {
     std::cout << "Hello from the C++ HTML DSL world " << std::endl << std::endl;
 
@@ -80,8 +101,10 @@ int main() {
             new A_Tag("www.twitch.tv", std::vector<Tag*>{
                 new Img_Tag("twitch.png")
             }),
-            new Img_Tag("icon.png", "cool icon image")
+            new Img_Tag("icon.png", "cool icon image"),
+            new Unary_Tag("br")
         });
     std::cout << root->to_string() << std::endl;
+    delete root;
     return 0;
 }
