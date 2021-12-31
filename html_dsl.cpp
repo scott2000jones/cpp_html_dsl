@@ -7,15 +7,24 @@
 Tag::Tag(std::string tag_name) {
     this->tag_name = tag_name;
 }
+Tag::Tag(std::string tag_name, std::string on_click) {
+    this->tag_name = tag_name;
+    this->on_click = on_click;
+}
 Tag::Tag(std::string tag_name, std::vector<Tag*> child_tags) {
     this->tag_name = tag_name;
+    this->child_tags = child_tags;
+}
+Tag::Tag(std::string tag_name, std::string on_click, std::vector<Tag*> child_tags) {
+    this->tag_name = tag_name;
+    this->on_click = on_click;
     this->child_tags = child_tags;
 }
 Tag::~Tag() {
     for (Tag *c : child_tags) delete c;
 }
 std::string Tag::to_string() {
-    std::string str = "<" + tag_name + ">\n";
+    std::string str = "<" + tag_name + " onclick=\"" + on_click + "\">\n";
     for (Tag* c : child_tags) str += c->to_string();
     str += "</" + tag_name + ">\n";
     return str;
@@ -83,7 +92,9 @@ int main() {
             new A_Tag("www.twitch.tv", std::vector<Tag*>{
                 new Img_Tag("twitch.png")
             }),
-            new Img_Tag("icon.png", "cool icon image"),
+            new Tag("div", "call_some_function", std::vector<Tag*>{
+                new Text("text in the div wow\n")
+            }),
             new Unary_Tag("br")
         });
     std::cout << root->to_string() << std::endl;

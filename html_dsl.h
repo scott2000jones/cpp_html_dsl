@@ -10,11 +10,14 @@
 class Tag {
     public:
         Tag(std::string tag_name);
+        Tag(std::string tag_name, std::string on_click);
         Tag(std::string tag_name, std::vector<Tag*> child_tags);
+        Tag(std::string tag_name, std::string on_click, std::vector<Tag*> child_tags);
         ~Tag();
         virtual std::string to_string();
     protected:
         std::string tag_name;
+        std::string on_click;
         std::vector<Tag*> child_tags;
 };
 
