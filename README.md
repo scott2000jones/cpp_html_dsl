@@ -15,4 +15,5 @@ Tag *root = new Tag("html", std::vector<Tag*>{
     new Unary_Tag("br")
 });
 std::cout << root->to_string() << std::endl;
+delete root;
 ```
