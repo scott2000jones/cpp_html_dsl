@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-#include "cpp_html_dsl.h"
+#include "html_dsl.h"
 
 Tag::Tag(std::string tag_name) {
     this->tag_name = tag_name;
@@ -19,6 +19,11 @@ std::string Tag::to_string() {
     for (Tag* c : child_tags) str += c->to_string();
     str += "</" + tag_name + ">\n";
     return str;
+}
+
+Text::Text(std::string contents) : Tag(contents) {};
+std::string Text::to_string() {
+    return tag_name;
 }
 
 A_Tag::A_Tag(std::string href_url) : Tag("a") {
@@ -72,7 +77,9 @@ int main() {
     std::cout << "Hello from the C++ HTML DSL world " << std::endl << std::endl;
 
     Tag *root = new Tag("root_tag", std::vector<Tag*>{
-            new Tag("new_tag"),
+            new Tag("p", std::vector<Tag*>{
+                new Text("hello here is some text please ignore it for now\n")
+            }),
             new A_Tag("www.twitch.tv", std::vector<Tag*>{
                 new Img_Tag("twitch.png")
             }),
