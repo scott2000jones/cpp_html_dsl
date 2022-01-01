@@ -14,6 +14,6 @@ Tag *root = new Tag("html", std::vector<Tag*>{
     new Img_Tag("icon.png", "a really cool icon"),
     new Unary_Tag("br")
 });
-std::cout << root->to_string() << std::endl;
+std::cout << "<!DOCTYPE html>" << root->to_string() << std::endl;
 delete root;
 ```

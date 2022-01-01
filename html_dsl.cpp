@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-#include "html_dsl.h"
+#include "html_dsl.hpp"
 
 /* Implementations of Tag class methods */
 Tag::Tag(std::string tag_name) {
@@ -86,24 +86,4 @@ std::string Link_Tag::to_string() {
 Unary_Tag::Unary_Tag(std::string tag_name) : Tag(tag_name) {}
 std::string Unary_Tag::to_string() {
     return "<" + tag_name + " />\n";
-}
-
-int main() {
-    std::cout << "Hello from the C++ HTML DSL world " << std::endl << std::endl;
-
-    Tag *root = new Tag("root_tag", std::vector<Tag*>{
-            new Tag("p", std::vector<Tag*>{
-                new Text("hello here is some text please ignore it for now\n")
-            }),
-            new A_Tag("www.twitch.tv", std::vector<Tag*>{
-                new Img_Tag("twitch.png")
-            }),
-            new Tag("div", "call_some_function", std::vector<Tag*>{
-                new Text("text in the div wow\n")
-            }),
-            new Unary_Tag("br")
-        });
-    std::cout << root->to_string() << std::endl;
-    delete root;
-    return 0;
 }
